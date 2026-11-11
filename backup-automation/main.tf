@@ -19,3 +19,8 @@ variable "retention_count" {
     type = number
     default = 3
 }
+
+locals {
+    source_dir = "${var.base_dir}/source"
+    backup_dir = "${var.base_dir}/backup"
+}
