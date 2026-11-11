@@ -40,3 +40,12 @@ resource "local_file" "backup_dir_marker" {
     content = "Backup-mapp skapad av Terraform.\n"
 }
 
+resource "local_file" "config" {
+    filename ="${var.base_dir}/config.json"
+    content = jsonencode({
+        source_dir      = abspath(local.source_dir)
+        backup_dir      = abspath(local.backup_dir)
+        log_file        = abspath("${var.base_dir}/backup.log")
+        retention_count = var.retention_count
+    })
+}
