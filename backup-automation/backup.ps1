@@ -37,3 +37,15 @@ function Get-BackupConfig {
     }
     return $config
 }
+
+function New-BackupFolder {
+    param([Parameter(Mandatory)][string]$BackupRoot)
+
+    $name = "backup_" + (Get-Date -Format "yyyyMMdd_HHmmss")
+    $path = Join-Path $BackupRoot $name
+    New-Item -Path $path -ItemType Directory -Force | Out-Null
+    return $path
+}
+
+# $c = Get-BackupConfig -Path $ConfigPath
+# New-BackupFolder -BackupRoot $c.Backup_dir
