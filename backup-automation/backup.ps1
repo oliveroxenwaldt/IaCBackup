@@ -47,5 +47,40 @@ function New-BackupFolder {
     return $path
 }
 
-# $c = Get-BackupConfig -Path $ConfigPath
-# New-BackupFolder -BackupRoot $c.Backup_dir
+function Copy-SourceFiles {
+    param(
+        [Parameter(Mandatory)][string]$Source,
+        [Parameter(Mandatory)][string]$Destination
+    )
+
+    $files = Get-ChildItem -Path $Source -File -Recurse
+    if ($files.Count -eq 0) {
+        throw "Inga filer att backa upp i $Source"
+    }
+
+    $copied = 0
+    foreach ($file in $files) {
+        $relative   = $file.FullName.Substring($Source.Length).TrimStart('\', '/')
+        $target     = Join-Path $Destination $relative
+        $targetDir  = Split-Path $target -Parent
+
+        if(-not (Test-Path $targetDir)) {
+            New-Item -Path $targetDir -ItemType Directory -Force | Out-Null
+        }
+
+        try {
+            Copy-Item -Path $file.Fullname -Destination $target -ErrorAction Stop
+            Write-Log "Kopierade: $relative"
+            $copied++
+        }
+        catch {
+        Write-Log "Kunde inte kopiera $relative : $($_.Exception.Message)" -Level "ERROR"
+        }
+    }
+    return $copied
+}
+
+$c = Get-BackupConfig -Path $ConfigPath
+New-BackupFolder -BackupRoot $c.Backup_dir
+$f = New-BackupFolder -BackupRoot $c.backup_dir
+Copy-SourceFiles -Source $c.source_dir -Destination $f
