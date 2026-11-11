@@ -29,3 +29,14 @@ resource "local_file" "sample_report" {
     filename = "${local.source_dir}/rapport.txt"
     content = "Detta är en viktig rapport som måste backas upp.\n"
 }
+
+resource "local_file" "sample_notes" {
+    filename = "${local.source_dir}/anteckningar.txt"
+    content = "Anteckningar från kursen Infrastruktur konfigurering.\n"
+}
+
+resource "local_file" "backup_dir_marker" {
+    filename = "${local.backup_dir}/.keep"
+    content = "Backup-mapp skapad av Terraform.\n"
+}
+
