@@ -8,3 +8,14 @@ terraform {
 }
 provider "local" {}
 
+variable "base_dir" {
+    description = "Rotmap för hela projektets testmiljö"
+    type = string
+    default = "./backup_demo"
+}
+
+variable "retention_count" {
+    description = "Hur många backuper som ska sparas (äldre tas bort)"
+    type = number
+    default = 3
+}
