@@ -24,3 +24,8 @@ locals {
     source_dir = "${var.base_dir}/source"
     backup_dir = "${var.base_dir}/backup"
 }
+
+resource "local_file" "sample_report" {
+    filename = "${local.source_dir}/rapport.txt"
+    content = "Detta är en viktig rapport som måste backas upp.\n"
+}
