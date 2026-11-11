@@ -92,7 +92,7 @@ function Test-Backup {
         $backupFile = Join-Path $BackupFolder $relative
 
         if (-not (Test-Path $backupFile)) {
-            Write-Log "SAKNASi backup: $relative" Level "ERROR"
+            Write-Log "SAKNAS i backup: $relative" Level "ERROR"
             $allOK = $false
         }
         elseif ((Get-FileHash $file.FullName).Hash -ne (Get-FileHash $backupFile).Hash) {
@@ -106,8 +106,24 @@ function Test-Backup {
     return $allOK
 }
 
+function Remove-OldBackups {
+    param(
+        [Parameter(Mandatory)][string]$BackupRoot,
+        [Parameter(Mandatory)][int]$Keep
+    )
 
-$c = Get-BackupConfig -Path $ConfigPath
-New-BackupFolder -BackupRoot $c.Backup_dir
-$f = New-BackupFolder -BackupRoot $c.backup_dir
-Copy-SourceFiles -Source $c.source_dir -Destination $f
+    $old = Get-ChildItem -Path $BackupRoot -Directory -Filter "backup_*" |
+        Sort-Object Name -Descending |
+        Select-Object -Skip $Keep
+
+    foreach ($folder in $old) {
+        Remove-Item -Path $folder.FullName -Recurse -Force
+        Write-Log "Tog bort gammal backup: $($folder.Name)" -Level "WARN"
+    }
+}
+
+#$c = Get-BackupConfig -Path $ConfigPath
+#New-BackupFolder -BackupRoot $c.Backup_dir
+#$f = New-BackupFolder -BackupRoot $c.backup_dir
+#Copy-SourceFiles -Source $c.source_dir -Destination $f
+#Remove-OldBackups -BackupRoot $c.backup_dir -Keep 3
