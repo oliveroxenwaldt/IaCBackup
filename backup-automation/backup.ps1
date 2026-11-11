@@ -80,6 +80,33 @@ function Copy-SourceFiles {
     return $copied
 }
 
+function Test-Backup {
+    param(
+        [Parameter(Mandatory)][string]$Source,
+        [Parameter(Mandatory)][string]$BackupFolder
+    )
+
+    $allOK = $true
+    foreach ($file in (Get-ChildItem -Path $Source -File -Recurse)) {
+        $relative   = $file.FullName.Substring($Source.Length).TrimStart('\', '/')
+        $backupFile = Join-Path $BackupFolder $relative
+
+        if (-not (Test-Path $backupFile)) {
+            Write-Log "SAKNASi backup: $relative" Level "ERROR"
+            $allOK = $false
+        }
+        elseif ((Get-FileHash $file.FullName).Hash -ne (Get-FileHash $backupFile).Hash) {
+            Write-Log "HASH STÄMMER INTE: $relative" -Level "ERROR"
+            $allOK = $false
+        } 
+        else {
+            Write-Log "Verifierad OK: $relative"
+        }
+    }
+    return $allOK
+}
+
+
 $c = Get-BackupConfig -Path $ConfigPath
 New-BackupFolder -BackupRoot $c.Backup_dir
 $f = New-BackupFolder -BackupRoot $c.backup_dir
