@@ -122,6 +122,32 @@ function Remove-OldBackups {
     }
 }
 
+try {
+    $config =Get-BackupConfig -Path $ConfigPath
+    $script:Logfile = $config.log_file
+
+    Write-Log "=== Backup startar ==="
+    $backupFolder = New-BackupFolder -BackupRoot $config.backup_dir
+
+    $count = Copy-SourceFiles -Source $config.source_dir -Destination $backupFolder
+    Write-Log "Antal filer kopierade: $count"
+
+    if (Test-Backup -Source $config.source_dir -BackupFolder $backupFolder) {
+        Write-Log "VERIFIERING LYCKADES"
+    }
+    else {
+        throw "Verifiering misslyckades"
+    }
+
+    Remove-OldBackups -BackupRoot $config.backup_dir -Keep $config.retention_count
+    Write-Log "=== Backup klar ==="
+}
+catch {
+    Write-Log "FEL: $($_.Exception.Message)" -Level "ERROR"
+    exit 1
+}
+
+
 #$c = Get-BackupConfig -Path $ConfigPath
 #New-BackupFolder -BackupRoot $c.Backup_dir
 #$f = New-BackupFolder -BackupRoot $c.backup_dir
