@@ -49,3 +49,18 @@ resource "local_file" "config" {
         retention_count = var.retention_count
     })
 }
+
+output "config_path" {
+    description = "Sökväg till konfigurationsfilen som Powershell-skriptet ska läsa"
+    value       = abspath(local_file.config.filename)    
+}
+
+output "source_dir" {
+    description = "Mapppen som ska backas upp"
+    value       = abspath(local.source_dir)
+}
+
+output "backup_dir" {
+    description = "Mappen där backupen hamnar"
+    value       = abspath(local.backup_dir)
+}
