@@ -14,7 +14,13 @@ function Write-Log {
     )
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $line = "[$timestamp] [$Level] $Message"
-    Write-Host $line
+    
+    switch ($Level) {
+        "WARN" { Write-Host $line -ForegroundColor Yellow }
+        "ERROR" { Write-Host $line -ForegroundColor Red }
+        default { Write-Host $line }
+    }
+    
     if ($script:LogFile) {
         Add-Content -Path $script:LogFile -Value $line
     }
