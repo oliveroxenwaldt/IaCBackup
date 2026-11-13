@@ -18,6 +18,7 @@ terraform apply
 ./backup.ps1 -ConfigPath (terraform output -raw config_path)
 ```
 ## Resultat
+Resultatet blir att filer kopieras och det skapas en backup. Gamla backups tas även bort
 [Resultat](Resultat.png)
 
 ## Reflektion
