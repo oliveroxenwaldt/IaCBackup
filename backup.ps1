@@ -102,6 +102,7 @@ function Copy-SourceFiles {
         }
 
         try {
+            # -ErrorAction Stop avslutar skriptet ifall det inte går att kopiera filen
             Copy-Item -Path $file.Fullname -Destination $target -ErrorAction Stop
             Write-Log "Kopierade: $relative"
             $copied++
@@ -128,7 +129,7 @@ function Test-Backup {
         $backupFile = Join-Path $BackupFolder $relative
 
         if (-not (Test-Path $backupFile)) {
-            Write-Log "SAKNAS i backup: $relative" Level "ERROR"
+            Write-Log "SAKNAS i backup: $relative" -Level "ERROR"
             $allOK = $false
         }
         # Tre fall: filen saknas, filen finns men innehållet skiljer sig, eller allt är OK

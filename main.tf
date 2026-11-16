@@ -47,7 +47,7 @@ resource "local_file" "sample_notes" {
     content = "Anteckningar från kursen Infrastruktur konfigurering.\n"
 }
 
-# local_file skapar mappen åt sin fil så att markörfil i backups/ ge mappen på köpet
+# local_file skapar mappen åt sin fil så att markörfil i backup/ ge mappen på köpet
 resource "local_file" "backup_dir_marker" {
     filename = "${local.backup_dir}/.keep"
     content = "Backup-mapp skapad av Terraform.\n"
@@ -69,15 +69,15 @@ resource "local_file" "config" {
 
 # Outputs: 
 
-# Outputs visar information efter apply och gör att nästa steg i kedjan (PoerShell) kan hämta värdena: terraform output -raw config_path
+# Outputs visar information efter apply och gör att nästa steg i kedjan (PowerShell) kan hämta värdena: terraform output -raw config_path
 output "config_path" {
-    description = "Sökväg till konfigurationsfilen som Powershell-skriptet ska läsa"
+    description = "Sökväg till konfigurationsfilen som PowerShell-skriptet ska läsa"
     # local_file.config.filename är en referens (typ.namn.egenskap)
     value       = abspath(local_file.config.filename)    
 }
 
 output "source_dir" {
-    description = "Mapppen som ska backas upp"
+    description = "Mappen som ska backas upp"
     value       = abspath(local.source_dir)
 }
 
