@@ -1,11 +1,11 @@
-#Requires -Version 7.0
+
 <#
-.SYNOPSIS 
     Tar backup av källmapp, verifierar den och rensar gamla backuper.
     Terraform skapar config.json, det här skriptet läser den och gör jobbet.
-.PARAMETER ConfigPath
-    Söjväg till config.json. Hämtas med: terraform output -raw config_path
-.EXAMPLE
+
+    $ConfigPath
+    Sökväg till config.json. Hämtas med: terraform output -raw config_path
+
     ./backup.ps1 -ConfigPath (terraform output -raw config_path)
 #>
 
