@@ -9,6 +9,7 @@
     ./backup.ps1 -ConfigPath (terraform output -raw config_path)
 #>
 
+# Gör detta PowerShell-skriptet till en "Advanced Function"
 [CmdletBinding()]
 param (
     # Standardvärde så att skriptet går att köra utan argument

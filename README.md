@@ -28,4 +28,4 @@ Det svåra tycker jag har varit att lära sig skriva PowerShel koden, man vet in
 
 
 ## GitHub
-[Repo](https://github.com/oliveroxenwaldt/IaCBackup/tree/main/backup-automation)
+[Repo](https://github.com/oliveroxenwaldt/IaCBackup)
